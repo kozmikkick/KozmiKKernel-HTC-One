@@ -6,6 +6,7 @@ make -j8
 
 # copy modules
 find arch -type f -name '*.ko' -exec cp -f {} Build/KozmiKKernel/modules \;
+find block -type f -name '*.ko' -exec cp -f {} Build/KozmiKKernel/modules \;
 find crypto -type f -name '*.ko' -exec cp -f {} Build/KozmiKKernel/modules \;
 find drivers -type f -name '*.ko' -exec cp -f {} Build/KozmiKKernel/modules \;
 find fs -type f -name '*.ko' -exec cp -f {} Build/KozmiKKernel/modules \;
@@ -38,30 +39,16 @@ rm -fR ./ramdisk-sense/system
 rm -fR ./newramdisksense.cpio.gz
 rm -fR ./bootimg.out
 
-####Building aosp boot.img Start####
-# compile boot.img
-mkdir bootimg.out
-mkdir -p ./ramdisk-aosp/system/lib/modules
-cd ramdisk-aosp
-find . | cpio -o -H newc | gzip > ../newramdiskaosp.cpio.gz
-cd ..
-./tools/mkbootimg --kernel ./zImage.new/zImage --ramdisk ./newramdiskaosp.cpio.gz --pagesize 2048 -o ./bootimg.out/bootaosp.img
-
-cp ./bootimg.out/bootaosp.img ./KozmiKKernel/bootaosp.img
-####Building aosp boot.img Finished####
 
 # compile install zip
 cd KozmiKKernel
-zip -r ./KozmiKKernel.zip ./META-INF ./modules bootsense.img bootaosp.img zImage
+zip -r ./KozmiKKernel.zip ./META-INF ./modules bootsense.img zImage
 
 # cleaning up
 cd ..
 rm -fR ./KozmiKKernel/zImage
 rm -fR ./KozmiKKernel/bootsense.img
-rm -fR ./KozmiKKernel/bootaosp.img
 rm -fR ./KozmiKKernel/modules
 mkdir ./KozmiKKernel/modules
-rm -fR ./ramdisk-aosp/system
-rm -fR ./newramdiskaosp.cpio.gz
 rm -fR ./bootimg.out
 rm -fR ./zImage.new
