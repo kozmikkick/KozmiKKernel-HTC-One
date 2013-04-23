@@ -1034,8 +1034,11 @@ static struct pvs_table * __init select_freq_plan(u32 pte_efuse_phys,
 	pte_efuse_val = readl_relaxed(pte_efuse);
 	iounmap(pte_efuse);
 
-	
+#ifndef CONFIG_MACH_M7_UL	
 	drv.speed_bin = get_speed_bin(pte_efuse_val);
+#else
+	drv.speed_bin = 2;
+#endif
 	drv.pvs_bin = get_pvs_bin(pte_efuse_val);
 
 	return &pvs_tables[drv.speed_bin][drv.pvs_bin];
