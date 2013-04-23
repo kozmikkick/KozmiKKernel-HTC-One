@@ -46,7 +46,7 @@ ui_print("Contact-Twitter: @kozmikkick");
 ui_print("");
 ui_print("");
 ui_print("Extracting and Updating System Modules");
-mount("ext4", "EMMC", "/dev/block/mmcblk0p12", "/system");
+mount("ext4", "EMMC", "/dev/block/mmcblk0p35", "/system");
 delete_recursive("/system/lib/modules");
 package_extract_dir("modules", "/system/lib/modules");
 set_perm_recursive(0, 0, 0755, 0755, "/system/lib/modules");
