@@ -1034,10 +1034,10 @@ static struct pvs_table * __init select_freq_plan(u32 pte_efuse_phys,
 	pte_efuse_val = readl_relaxed(pte_efuse);
 	iounmap(pte_efuse);
 
-#ifndef CONFIG_MACH_M7_UL	
-	drv.speed_bin = get_speed_bin(pte_efuse_val);
+#ifdef CONFIG_KOZMIK_OVERCLOCKING	
+	drv.speed_bin = 3;
 #else
-	drv.speed_bin = 2;
+	drv.speed_bin = get_speed_bin(pte_efuse_val);
 #endif
 	drv.pvs_bin = get_pvs_bin(pte_efuse_val);
 
