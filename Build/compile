@@ -15,7 +15,6 @@ find net -type f -name '*.ko' -exec cp -f {} Build/KozmiKKernel/modules \;
 
 ####Building sense boot.img Start####
 cd Build
-mkdir zImage.new
 cd ..
 
 # copy zImage
@@ -23,32 +22,14 @@ cp -f arch/arm/boot/zImage Build/zImage.new/zImage
 cp -f arch/arm/boot/zImage Build/KozmiKKernel/zImage
 
 cd Build
-# compile bootsense.img
-mkdir bootimg.out
-mkdir -p ./ramdisk-sense/system/lib/modules
-cd ramdisk-sense
-find . | cpio -o -H newc | gzip > ../newramdisksense.cpio.gz
-cd ..
-./tools/mkbootimg --kernel ./zImage.new/zImage --ramdisk ./newramdisksense.cpio.gz --pagesize 2048 -o ./bootimg.out/bootsense.img
-
-cp ./bootimg.out/bootsense.img ./KozmiKKernel/bootsense.img
-####Building sense boot.img Finish####
-
-# cleaning up
-rm -fR ./ramdisk-sense/system
-rm -fR ./newramdisksense.cpio.gz
-rm -fR ./bootimg.out
-
 
 # compile install zip
 cd KozmiKKernel
-zip -r ./KozmiKKernel.zip ./META-INF ./modules bootsense.img zImage
+zip -r ./KozmiKKernel.zip ./META-INF ./modules zImage
 
 # cleaning up
 cd ..
 rm -fR ./KozmiKKernel/zImage
-rm -fR ./KozmiKKernel/bootsense.img
 rm -fR ./KozmiKKernel/modules
 mkdir ./KozmiKKernel/modules
-rm -fR ./bootimg.out
 rm -fR ./zImage.new
