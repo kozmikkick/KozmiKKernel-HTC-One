@@ -18,7 +18,6 @@ cd Build
 cd ..
 
 # copy zImage
-cp -f arch/arm/boot/zImage Build/zImage.new/zImage
 cp -f arch/arm/boot/zImage Build/KozmiKKernel/zImage
 
 cd Build
