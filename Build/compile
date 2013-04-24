@@ -18,17 +18,17 @@ cd Build
 cd ..
 
 # copy zImage
-cp -f arch/arm/boot/zImage Build/KozmiKKernel/zImage
+cp -f arch/arm/boot/zImage Build/KozmiKKernel/kernel/zImage
 
 cd Build
 
 # compile install zip
 cd KozmiKKernel
-zip -r ./KozmiKKernel.zip ./META-INF ./modules zImage
+zip -r ./KozmiKKernel.zip ./META-INF ./modules ./kernel
 
 # cleaning up
 cd ..
-rm -fR ./KozmiKKernel/zImage
+rm -fR ./KozmiKKernel/kernel/zImage
 rm -fR ./KozmiKKernel/modules
 mkdir ./KozmiKKernel/modules
 rm -fR ./zImage.new
