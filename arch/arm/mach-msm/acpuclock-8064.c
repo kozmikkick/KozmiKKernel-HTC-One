@@ -22,6 +22,9 @@
 #include "acpuclock.h"
 #include "acpuclock-krait.h"
 
+#include <mach/msm-config.h>
+
+
 static struct hfpll_data hfpll_data __initdata = {
 	.mode_offset = 0x00,
 	.l_offset = 0x08,
@@ -47,13 +50,9 @@ static struct scalable scalable[] __initdata = {
 		.aux_clk_sel = 3,
 		.sec_clk_sel = 2,
 		.l2cpmr_iaddr = 0x4501,
-#ifdef CONFIG_KOZMIK_OVERCLOCKING	
-		.vreg[VREG_CORE] = { "krait0", 1450000 },
-#else
-		.vreg[VREG_CORE] = { "krait0", 1300000 },
-#endif
-		.vreg[VREG_MEM]  = { "krait0_mem", 1150000 },
-		.vreg[VREG_DIG]  = { "krait0_dig", 1150000 },
+		.vreg[VREG_CORE] = { "krait0", VREG_CORE_MAX },
+		.vreg[VREG_MEM]  = { "krait0_mem", VDD_MEM_MAX },
+		.vreg[VREG_DIG]  = { "krait0_dig", VDD_DIG_MAX },
 		.vreg[VREG_HFPLL_A] = { "krait0_hfpll", 1800000 },
 	},
 	[CPU1] = {
@@ -62,13 +61,9 @@ static struct scalable scalable[] __initdata = {
 		.aux_clk_sel = 3,
 		.sec_clk_sel = 2,
 		.l2cpmr_iaddr = 0x5501,
-#ifdef CONFIG_KOZMIK_OVERCLOCKING	
-		.vreg[VREG_CORE] = { "krait1", 1450000 },
-#else
-		.vreg[VREG_CORE] = { "krait1", 1300000 },
-#endif
-		.vreg[VREG_MEM]  = { "krait1_mem", 1150000 },
-		.vreg[VREG_DIG]  = { "krait1_dig", 1150000 },
+		.vreg[VREG_CORE] = { "krait1", VREG_CORE_MAX },
+		.vreg[VREG_MEM]  = { "krait1_mem", VDD_MEM_MAX },
+		.vreg[VREG_DIG]  = { "krait1_dig", VDD_DIG_MAX },
 		.vreg[VREG_HFPLL_A] = { "krait1_hfpll", 1800000 },
 	},
 	[CPU2] = {
@@ -77,13 +72,9 @@ static struct scalable scalable[] __initdata = {
 		.aux_clk_sel = 3,
 		.sec_clk_sel = 2,
 		.l2cpmr_iaddr = 0x6501,
-#ifdef CONFIG_KOZMIK_OVERCLOCKING	
-		.vreg[VREG_CORE] = { "krait2", 1450000 },
-#else
-		.vreg[VREG_CORE] = { "krait2", 1300000 },
-#endif
-		.vreg[VREG_MEM]  = { "krait2_mem", 1150000 },
-		.vreg[VREG_DIG]  = { "krait2_dig", 1150000 },
+		.vreg[VREG_CORE] = { "krait2", VREG_CORE_MAX },
+		.vreg[VREG_MEM]  = { "krait2_mem", VDD_MEM_MAX },
+		.vreg[VREG_DIG]  = { "krait2_dig", VDD_DIG_MAX },
 		.vreg[VREG_HFPLL_A] = { "krait2_hfpll", 1800000 },
 	},
 	[CPU3] = {
@@ -92,13 +83,9 @@ static struct scalable scalable[] __initdata = {
 		.aux_clk_sel = 3,
 		.sec_clk_sel = 2,
 		.l2cpmr_iaddr = 0x7501,
-#ifdef CONFIG_KOZMIK_OVERCLOCKING	
-		.vreg[VREG_CORE] = { "krait3", 1450000 },
-#else
-		.vreg[VREG_CORE] = { "krait3", 1300000 },
-#endif
-		.vreg[VREG_MEM]  = { "krait3_mem", 1150000 },
-		.vreg[VREG_DIG]  = { "krait3_dig", 1150000 },
+		.vreg[VREG_CORE] = { "krait3", VREG_CORE_MAX },
+		.vreg[VREG_MEM]  = { "krait3_mem", VDD_MEM_MAX },
+		.vreg[VREG_DIG]  = { "krait3_dig", VDD_DIG_MAX },
 		.vreg[VREG_HFPLL_A] = { "krait3_hfpll", 1800000 },
 	},
 	[L2] = {
@@ -117,7 +104,7 @@ static struct msm_bus_paths bw_level_tbl[] __initdata = {
 	[2] = BW_MBPS(1600), 
 	[3] = BW_MBPS(2128), 
 	[4] = BW_MBPS(3200), 
-	[5] = BW_MBPS(4264),
+	[5] = BW_MBPS(4264), 
 };
 
 static struct msm_bus_scale_pdata bus_scale_data __initdata = {
@@ -509,154 +496,6 @@ static struct acpu_level tbl_PVS6_2000MHz[] __initdata = {
 	{ 1, {  1890000, HFPLL, 1, 0x46 }, L2(15), 1100000 },
 	{ 0, { 0 } }
 };
-#ifdef CONFIG_KOZMIK_OVERCLOCKING	
-static struct acpu_level tbl_PVS0_KozmiKOC[] __initdata = {
-	{ 1, {   192000, PLL_8, 0, 0x00 }, L2(0),   950000 },
-	{ 1, {   384000, PLL_8, 0, 0x00 }, L2(0),   950000 },
-	{ 1, {   486000, HFPLL, 2, 0x24 }, L2(5),   950000 },
-	{ 1, {   594000, HFPLL, 1, 0x16 }, L2(5),   950000 },
-	{ 1, {   702000, HFPLL, 1, 0x1A }, L2(5),   950000 },
-	{ 1, {   810000, HFPLL, 1, 0x1E }, L2(5),   962500 },
-	{ 1, {   918000, HFPLL, 1, 0x22 }, L2(5),   975000 },
-	{ 1, {  1026000, HFPLL, 1, 0x26 }, L2(5),  1000000 },
-	{ 1, {  1134000, HFPLL, 1, 0x2A }, L2(15), 1025000 },
-	{ 1, {  1242000, HFPLL, 1, 0x2E }, L2(15), 1037500 },
-	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(15), 1062500 },
-	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(15), 1100000 },
-	{ 1, {  1566000, HFPLL, 1, 0x3A }, L2(15), 1125000 },
-	{ 1, {  1674000, HFPLL, 1, 0x3E }, L2(15), 1175000 },
-	{ 1, {  1782000, HFPLL, 1, 0x42 }, L2(15), 1225000 },
-	{ 1, {  1890000, HFPLL, 1, 0x46 }, L2(15), 1287500 },
-	{ 1, {  1944000, HFPLL, 1, 0x4A }, L2(15), 1337500 },
-	{ 0, { 0 } }
-};
-
-static struct acpu_level tbl_PVS1_KozmiKOC[] __initdata = {
-	{ 1, {   192000, PLL_8, 0, 0x00 }, L2(0),   925000 },
-	{ 1, {   384000, PLL_8, 0, 0x00 }, L2(0),   925000 },
-	{ 1, {   486000, HFPLL, 2, 0x24 }, L2(5),   925000 },
-	{ 1, {   594000, HFPLL, 1, 0x16 }, L2(5),   925000 },
-	{ 1, {   702000, HFPLL, 1, 0x1A }, L2(5),   925000 },
-	{ 1, {   810000, HFPLL, 1, 0x1E }, L2(5),   937500 },
-	{ 1, {   918000, HFPLL, 1, 0x22 }, L2(5),   950000 },
-	{ 1, {  1026000, HFPLL, 1, 0x26 }, L2(5),   975000 },
-	{ 1, {  1134000, HFPLL, 1, 0x2A }, L2(15), 1000000 },
-	{ 1, {  1242000, HFPLL, 1, 0x2E }, L2(15), 1012500 },
-	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(15), 1037500 },
-	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(15), 1075000 },
-	{ 1, {  1566000, HFPLL, 1, 0x3A }, L2(15), 1100000 },
-	{ 1, {  1674000, HFPLL, 1, 0x3E }, L2(15), 1137500 },
-	{ 1, {  1782000, HFPLL, 1, 0x42 }, L2(15), 1187500 },
-	{ 1, {  1890000, HFPLL, 1, 0x46 }, L2(15), 1250000 },
-	{ 1, {  1944000, HFPLL, 1, 0x4A }, L2(15), 1325000 },
-	{ 0, { 0 } }
-};
-
-static struct acpu_level tbl_PVS2_KozmiKOC[] __initdata = {
-	{ 1, {   192000, PLL_8, 0, 0x00 }, L2(0),   900000 },
-	{ 1, {   384000, PLL_8, 0, 0x00 }, L2(0),   900000 },
-	{ 1, {   486000, HFPLL, 2, 0x24 }, L2(5),   900000 },
-	{ 1, {   594000, HFPLL, 1, 0x16 }, L2(5),   900000 },
-	{ 1, {   702000, HFPLL, 1, 0x1A }, L2(5),   900000 },
-	{ 1, {   810000, HFPLL, 1, 0x1E }, L2(5),   912500 },
-	{ 1, {   918000, HFPLL, 1, 0x22 }, L2(5),   925000 },
-	{ 1, {  1026000, HFPLL, 1, 0x26 }, L2(5),   950000 },
-	{ 1, {  1134000, HFPLL, 1, 0x2A }, L2(15),  975000 },
-	{ 1, {  1242000, HFPLL, 1, 0x2E }, L2(15),  987500 },
-	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(15), 1012500 },
-	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(15), 1050000 },
-	{ 1, {  1566000, HFPLL, 1, 0x3A }, L2(15), 1075000 },
-	{ 1, {  1674000, HFPLL, 1, 0x3E }, L2(15), 1112500 },
-	{ 1, {  1782000, HFPLL, 1, 0x42 }, L2(15), 1162500 },
-	{ 1, {  1890000, HFPLL, 1, 0x46 }, L2(15), 1212500 },
-	{ 1, {  1944000, HFPLL, 1, 0x4A }, L2(15), 1275000 },
-	{ 0, { 0 } }
-};
-
-static struct acpu_level tbl_PVS3_KozmiKOC[] __initdata = {
-	{ 1, {   192000, PLL_8, 0, 0x00 }, L2(0),   900000 },
-	{ 1, {   384000, PLL_8, 0, 0x00 }, L2(0),   900000 },
-	{ 1, {   486000, HFPLL, 2, 0x24 }, L2(5),   900000 },
-	{ 1, {   594000, HFPLL, 1, 0x16 }, L2(5),   900000 },
-	{ 1, {   702000, HFPLL, 1, 0x1A }, L2(5),   900000 },
-	{ 1, {   810000, HFPLL, 1, 0x1E }, L2(5),   900000 },
-	{ 1, {   918000, HFPLL, 1, 0x22 }, L2(5),   912500 },
-	{ 1, {  1026000, HFPLL, 1, 0x26 }, L2(5),   937500 },
-	{ 1, {  1134000, HFPLL, 1, 0x2A }, L2(15),  962500 },
-	{ 1, {  1242000, HFPLL, 1, 0x2E }, L2(15),  975000 },
-	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(15), 1000000 },
-	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(15), 1025000 },
-	{ 1, {  1566000, HFPLL, 1, 0x3A }, L2(15), 1050000 },
-	{ 1, {  1674000, HFPLL, 1, 0x3E }, L2(15), 1087500 },
-	{ 1, {  1782000, HFPLL, 1, 0x42 }, L2(15), 1137500 },
-	{ 1, {  1890000, HFPLL, 1, 0x46 }, L2(15), 1175000 },
-	{ 1, {  1944000, HFPLL, 1, 0x4A }, L2(15), 1225000 },
-	{ 0, { 0 } }
-};
-
-static struct acpu_level tbl_PVS4_KozmiKOC[] __initdata = {
-	{ 1, {   192000, PLL_8, 0, 0x00 }, L2(0),   875000 },
-	{ 1, {   384000, PLL_8, 0, 0x00 }, L2(0),   875000 },
-	{ 1, {   486000, HFPLL, 2, 0x24 }, L2(5),   875000 },
-	{ 1, {   594000, HFPLL, 1, 0x16 }, L2(5),   875000 },
-	{ 1, {   702000, HFPLL, 1, 0x1A }, L2(5),   875000 },
-	{ 1, {   810000, HFPLL, 1, 0x1E }, L2(5),   887500 },
-	{ 1, {   918000, HFPLL, 1, 0x22 }, L2(5),   900000 },
-	{ 1, {  1026000, HFPLL, 1, 0x26 }, L2(5),   925000 },
-	{ 1, {  1134000, HFPLL, 1, 0x2A }, L2(15),  950000 },
-	{ 1, {  1242000, HFPLL, 1, 0x2E }, L2(15),  962500 },
-	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(15),  975000 },
-	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(15), 1000000 },
-	{ 1, {  1566000, HFPLL, 1, 0x3A }, L2(15), 1037500 },
-	{ 1, {  1674000, HFPLL, 1, 0x3E }, L2(15), 1075000 },
-	{ 1, {  1782000, HFPLL, 1, 0x42 }, L2(15), 1112500 },
-	{ 1, {  1890000, HFPLL, 1, 0x46 }, L2(15), 1150000 },
-	{ 1, {  1944000, HFPLL, 1, 0x4A }, L2(15), 1200000 },
-	{ 0, { 0 } }
-};
-
-static struct acpu_level tbl_PVS5_KozmiKOC[] __initdata = {
-	{ 1, {   192000, PLL_8, 0, 0x00 }, L2(0),   875000 },
-	{ 1, {   384000, PLL_8, 0, 0x00 }, L2(0),   875000 },
-	{ 1, {   486000, HFPLL, 2, 0x24 }, L2(5),   875000 },
-	{ 1, {   594000, HFPLL, 1, 0x16 }, L2(5),   875000 },
-	{ 1, {   702000, HFPLL, 1, 0x1A }, L2(5),   875000 },
-	{ 1, {   810000, HFPLL, 1, 0x1E }, L2(5),   887500 },
-	{ 1, {   918000, HFPLL, 1, 0x22 }, L2(5),   900000 },
-	{ 1, {  1026000, HFPLL, 1, 0x26 }, L2(5),   925000 },
-	{ 1, {  1134000, HFPLL, 1, 0x2A }, L2(15),  937500 },
-	{ 1, {  1242000, HFPLL, 1, 0x2E }, L2(15),  950000 },
-	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(15),  962500 },
-	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(15),  987500 },
-	{ 1, {  1566000, HFPLL, 1, 0x3A }, L2(15), 1012500 },
-	{ 1, {  1674000, HFPLL, 1, 0x3E }, L2(15), 1050000 },
-	{ 1, {  1782000, HFPLL, 1, 0x42 }, L2(15), 1087500 },
-	{ 1, {  1890000, HFPLL, 1, 0x46 }, L2(15), 1125000 },
-	{ 1, {  1944000, HFPLL, 1, 0x4A }, L2(15), 1175000 },
-	{ 0, { 0 } }
-};
-
-static struct acpu_level tbl_PVS6_KozmiKOC[] __initdata = {
-	{ 1, {   192000, PLL_8, 0, 0x00 }, L2(0),   875000 },
-	{ 1, {   384000, PLL_8, 0, 0x00 }, L2(0),   875000 },
-	{ 1, {   486000, HFPLL, 2, 0x24 }, L2(5),   875000 },
-	{ 1, {   594000, HFPLL, 1, 0x16 }, L2(5),   875000 },
-	{ 1, {   702000, HFPLL, 1, 0x1A }, L2(5),   875000 },
-	{ 1, {   810000, HFPLL, 1, 0x1E }, L2(5),   887500 },
-	{ 1, {   918000, HFPLL, 1, 0x22 }, L2(5),   900000 },
-	{ 1, {  1026000, HFPLL, 1, 0x26 }, L2(5),   925000 },
-	{ 1, {  1134000, HFPLL, 1, 0x2A }, L2(15),  937500 },
-	{ 1, {  1242000, HFPLL, 1, 0x2E }, L2(15),  950000 },
-	{ 1, {  1350000, HFPLL, 1, 0x32 }, L2(15),  962500 },
-	{ 1, {  1458000, HFPLL, 1, 0x36 }, L2(15),  975000 },
-	{ 1, {  1566000, HFPLL, 1, 0x3A }, L2(15), 1000000 },
-	{ 1, {  1674000, HFPLL, 1, 0x3E }, L2(15), 1025000 },
-	{ 1, {  1782000, HFPLL, 1, 0x42 }, L2(15), 1062500 },
-	{ 1, {  1890000, HFPLL, 1, 0x46 }, L2(15), 1100000 },
-	{ 1, {  1944000, HFPLL, 1, 0x4A }, L2(15), 1150000 },
-	{ 0, { 0 } }
-};
-#endif
 
 static struct pvs_table pvs_tables[NUM_SPEED_BINS][NUM_PVS] __initdata = {
 	[0][PVS_SLOW]    = {tbl_slow, sizeof(tbl_slow),     0 },
@@ -679,15 +518,6 @@ static struct pvs_table pvs_tables[NUM_SPEED_BINS][NUM_PVS] __initdata = {
 	[2][4] = { tbl_PVS4_2000MHz, sizeof(tbl_PVS4_2000MHz),     25000 },
 	[2][5] = { tbl_PVS5_2000MHz, sizeof(tbl_PVS5_2000MHz),     25000 },
 	[2][6] = { tbl_PVS6_2000MHz, sizeof(tbl_PVS6_2000MHz),     25000 },
-#ifdef CONFIG_KOZMIK_OVERCLOCKING	
-	[3][0] = { tbl_PVS0_KozmiKOC, sizeof(tbl_PVS0_KozmiKOC),     0 },
-	[3][1] = { tbl_PVS1_KozmiKOC, sizeof(tbl_PVS1_KozmiKOC),     25000 },
-	[3][2] = { tbl_PVS2_KozmiKOC, sizeof(tbl_PVS2_KozmiKOC),     25000 },
-	[3][3] = { tbl_PVS3_KozmiKOC, sizeof(tbl_PVS3_KozmiKOC),     25000 },
-	[3][4] = { tbl_PVS4_KozmiKOC, sizeof(tbl_PVS4_KozmiKOC),     25000 },
-	[3][5] = { tbl_PVS5_KozmiKOC, sizeof(tbl_PVS5_KozmiKOC),     25000 },
-	[3][6] = { tbl_PVS6_KozmiKOC, sizeof(tbl_PVS6_KozmiKOC),     25000 },
-#endif
 };
 
 static struct acpuclk_krait_params acpuclk_8064_params __initdata = {
@@ -699,11 +529,7 @@ static struct acpuclk_krait_params acpuclk_8064_params __initdata = {
 	.l2_freq_tbl_size = sizeof(l2_freq_tbl),
 	.bus_scale = &bus_scale_data,
 	.pte_efuse_phys = 0x007000C0,
-#ifdef CONFIG_KOZMIK_OVERCLOCKING	
-	.stby_khz = 192000,
-#else
 	.stby_khz = 384000,
-#endif
 };
 
 static int __init acpuclk_8064_probe(struct platform_device *pdev)
