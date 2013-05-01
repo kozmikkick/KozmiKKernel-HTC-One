@@ -36,6 +36,8 @@
 #include <mach/perflock.h>
 #endif
 
+#include <mach/msm-config.h>
+
 #ifdef CONFIG_SMP
 struct cpufreq_work_struct {
 	struct work_struct work;
@@ -293,13 +295,13 @@ static int __cpuinit msm_cpufreq_init(struct cpufreq_policy *policy)
 
 	if (cpufreq_frequency_table_cpuinfo(policy, table)) {
 #ifdef CONFIG_MSM_CPU_FREQ_SET_MIN_MAX
-		policy->cpuinfo.min_freq = CONFIG_MSM_CPU_FREQ_MIN;
-		policy->cpuinfo.max_freq = CONFIG_MSM_CPU_FREQ_MAX;
+		policy->cpuinfo.min_freq = CPU_INITIAL_FREQ_MIN;
+		policy->cpuinfo.max_freq = CPU_INITIAL_FREQ_MAX;
 #endif
 	}
 #ifdef CONFIG_MSM_CPU_FREQ_SET_MIN_MAX
-	policy->min = CONFIG_MSM_CPU_FREQ_MIN;
-	policy->max = CONFIG_MSM_CPU_FREQ_MAX;
+	policy->min = CPU_INITIAL_FREQ_MIN;
+	policy->max = CPU_INITIAL_FREQ_MAX;
 #endif
 
 #ifdef CONFIG_ARCH_APQ8064
@@ -330,7 +332,7 @@ static int __cpuinit msm_cpufreq_init(struct cpufreq_policy *policy)
 		cur_freq = table[index].frequency;
 	}
 
-	policy->cur = CONFIG_MSM_CPU_FREQ_MAX;
+	policy->cur = CPU_INITIAL_FREQ_MAX;
 
 	policy->cpuinfo.transition_latency =
 		acpuclk_get_switch_time() * NSEC_PER_USEC;
