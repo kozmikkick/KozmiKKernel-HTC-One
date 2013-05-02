@@ -20,13 +20,13 @@
 
 /* in kHz */
 
-#define VDD_MEM_MAX		1250000  /* default: 1150000 */
-#define VDD_DIG_MAX		1250000  /* default: 1150000 */
+#define VDD_MEM_MAX		1150000  /* default: 1150000 */
+#define VDD_DIG_MAX		1150000  /* default: 1150000 */
 #define VREG_CORE_MAX		1450000  /* default: 1300000 */
 #define VREG_CORE_MIN		600000  /* default: 850000 */
 
 #define LIMIT_TEMP_MAX		80  /* default: 51 */
 
-#define CPU_INITIAL_FREQ_MAX	1782000
+#define CPU_INITIAL_FREQ_MAX	1944000
 #define CPU_INITIAL_FREQ_MIN	192000
 /* End */
