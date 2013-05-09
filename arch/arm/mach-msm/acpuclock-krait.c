@@ -1086,10 +1086,9 @@ static struct pvs_table * __init select_freq_plan(u32 pte_efuse_phys,
 
 	
 	drv.speed_bin = get_speed_bin(pte_efuse_val);
+	drv.pvs_bin = get_pvs_bin(pte_efuse_val);
 #ifdef CONFIG_KOZMIK_OVERCLOCKING	
 	drv.pvs_bin = 2;
-#else
-	drv.pvs_bin = get_pvs_bin(pte_efuse_val);
 #endif
 
 	return &pvs_tables[drv.speed_bin][drv.pvs_bin];
